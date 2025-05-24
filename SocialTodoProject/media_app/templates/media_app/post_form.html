@@ -1,0 +1,13 @@
+{% extends 'media_app/base.html' %}
+{% block title %}Create/Edit Post{% endblock %}
+{% block content %}
+<div class="max-w-md mx-auto bg-white p-6 rounded shadow">
+  <h1 class="text-xl font-bold mb-4">{{ form.instance.pk|yesno:"Edit Post,Create Post" }}</h1>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Save</button>
+    <a href="{% url 'media_app:post_list' %}" class="ml-4">Cancel</a>
+  </form>
+</div>
+{% endblock %}

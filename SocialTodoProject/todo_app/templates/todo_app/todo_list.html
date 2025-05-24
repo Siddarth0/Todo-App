@@ -1,0 +1,22 @@
+{% extends 'media_app/base.html' %}
+{% block title %}My Todos{% endblock %}
+{% block content %}
+<h1 class="text-2xl font-bold mb-4">My Todo List</h1>
+<a href="{% url 'todo_app:todo_create' %}" class="bg-green-500 text-white px-4 py-2 rounded">+ Add Todo</a>
+<ul class="mt-4 space-y-3">
+  {% for todo in todos %}
+    <li class="bg-white p-4 rounded shadow flex justify-between">
+      <div>
+        <input type="checkbox" disabled {% if todo.completed %}checked{% endif %} class="mr-2">
+        <span class="{% if todo.completed %}line-through{% endif %}">{{ todo.title }}</span>
+      </div>
+      <div>
+        <a href="{% url 'todo_app:todo_edit' todo.pk %}" class="text-yellow-600 mr-2">Edit</a>
+        <a href="{% url 'todo_app:todo_delete' todo.pk %}" class="text-red-600">Delete</a>
+      </div>
+    </li>
+  {% empty %}
+    <li>No todos yet.</li>
+  {% endfor %}
+</ul>
+{% endblock %}

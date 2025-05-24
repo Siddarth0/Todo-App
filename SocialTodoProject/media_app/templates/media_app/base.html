@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>{% block title %}SocialTodo{% endblock %}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+  <nav class="bg-blue-600 p-4 text-white flex justify-between">
+    <div>
+      <a href="{% url 'media_app:post_list' %}" class="mr-4">Posts</a>
+      <a href="{% url 'todo_app:todo_list' %}">Todos</a>
+    </div>
+    <div>
+      {% if user.is_authenticated %}
+        Hello, {{ user.username }} |
+        <a href="{% url 'media_app:logout' %}">Logout</a>
+      {% else %}
+        <a href="{% url 'media_app:login' %}">Login</a> |
+        <a href="{% url 'media_app:signup' %}">Sign Up</a>
+      {% endif %}
+    </div>
+  </nav>
+  <main class="container mx-auto p-6">{% block content %}{% endblock %}</main>
+</body>
+</html>
