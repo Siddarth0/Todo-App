@@ -1,34 +1,61 @@
 {% extends 'media_app/base.html' %}
 {% block title %}Post Detail{% endblock %}
+
 {% block content %}
-<div class="bg-white p-6 rounded shadow">
-  <p>{{ post.content }}</p>
-  <small class="text-gray-500">{{ post.created_at }}</small>
-  <p>Likes: {{ likes }}</p>
-  {% if user.is_authenticated %}
-    <a href="{% url 'media_app:like_post' post.pk %}" class="text-blue-600">Like/Unlike</a>
-  {% endif %}
+<div class="max-w-2xl mx-auto bg-white p-6 rounded shadow mb-6">
+  <p class="text-gray-800">{{ post.content }}</p>
+  <p class="text-sm text-gray-500 mt-1">{{ post.created_at|date:"M d, Y H:i" }}</p>
+
+  <div class="mt-4 flex items-center space-x-4">
+    {% if user.is_authenticated %}
+      <form action="{% url 'media_app:like_post' post.pk %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="text-3xl leading-none">
+          {% if user in post.likes.all %}
+            ❤️
+          {% else %}
+            🤍
+          {% endif %}
+        </button>
+      </form>
+    {% else %}
+      <span class="text-3xl">🤍</span>
+    {% endif %}
+    <span>{{ post.likes.count }}</span>
+
+    <button onclick="document.getElementById('comments').scrollIntoView()" class="flex items-center text-3xl leading-none hover:underline">
+      💬
+      <span class="ml-1 text-base">{{ post.comments.count }}</span>
+    </button>
+
+    {% if post.user == user %}
+      <a href="{% url 'media_app:post_edit' post.pk %}" class="text-yellow-600 hover:underline">Edit</a>
+      <a href="{% url 'media_app:post_delete' post.pk %}" class="text-red-600 hover:underline">Delete</a>
+    {% endif %}
+  </div>
 </div>
-<h2 class="mt-6 font-bold">Comments</h2>
-<ul class="space-y-2">
+
+<h2 id="comments" class="text-xl font-semibold mb-4">Comments ({{ post.comments.count }})</h2>
+<ul class="space-y-4">
   {% for c in comments %}
-    <li class="bg-gray-100 p-3 rounded">
+    <li class="bg-gray-100 p-4 rounded">
       <p>{{ c.content }}</p>
-      <small class="text-gray-500">{{ c.created_at }}</small>
+      <p class="text-sm text-gray-500 mt-1">{{ c.created_at|date:"M d, Y H:i" }}</p>
       {% if c.user == user %}
-        <a href="{% url 'media_app:comment_edit' c.pk %}" class="text-yellow-600">Edit</a> |
-        <a href="{% url 'media_app:comment_delete' c.pk %}" class="text-red-600">Delete</a>
+        <a href="{% url 'media_app:comment_edit' c.pk %}" class="text-yellow-600 hover:underline mr-2">Edit</a>
+        <a href="{% url 'media_app:comment_delete' c.pk %}" class="text-red-600 hover:underline">Delete</a>
       {% endif %}
     </li>
   {% empty %}
-    <li>No comments.</li>
+    <li class="text-gray-500">No comments yet.</li>
   {% endfor %}
 </ul>
+
 {% if user.is_authenticated %}
-  <form method="post" class="mt-4">
+  <form method="post" class="mt-6">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Comment</button>
+    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Post Comment</button>
   </form>
 {% endif %}
 {% endblock %}
