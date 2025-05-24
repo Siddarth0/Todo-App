@@ -4,6 +4,24 @@
   <meta charset="UTF-8"/>
   <title>{% block title %}SocialTodo{% endblock %}</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Global styling for form controls */
+    input, textarea, select {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      border: 2px solid black !important;
+      border-radius: 0.25rem !important;
+      padding: 0.5rem !important;
+      margin-bottom: 1rem;
+    }
+    /* Ensure form labels align properly */
+    label {
+      display: block;
+      margin-bottom: 0.25rem;
+      font-weight: 600;
+    }
+  </style>
 </head>
 <body class="bg-gray-100 min-h-screen">
   <nav class="bg-blue-600 p-4 text-white flex justify-between">

@@ -24,3 +24,6 @@ class SignupForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['username','email','password1','password2']
+        widgets = {
+            'content': forms.Textarea(attrs={'class':'w-full border border-black p-2 rounded','rows':3})
+        }
